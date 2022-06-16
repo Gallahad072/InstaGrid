@@ -1,6 +1,7 @@
 from datetime import datetime
 import numpy as np
 import os
+from os import path
 import shutil
 
 import instaloader
@@ -8,51 +9,54 @@ import cv2
 
 
 class InstaGrid:
-    def __init__(self, username=False, search=False, pcOrPhone=True) -> None:
+    def __init__(self, username) -> None:
         self.L = instaloader.Instaloader()
-        self.username = username if username else input("Personal Username: ")
         self.L.interactive_login(username)
-        search = search if search else input("Username of account to search: ")
-        self.prof = instaloader.Profile.from_username(self.L.context, search)
-        self.minPics = 8 if pcOrPhone else 10
-        self.totals = [8, 18, 32] if pcOrPhone else [10, 21]
+        print("Login Successful")
 
     def saveCollage(self):
         aspects = {8: (4, 2), 18: (6, 3), 32: (8, 4), 10: (2, 5), 21: (3, 7)}
-        numOfRows = aspects[self.numOfPics][1]
-        openImgs = [cv2.imread(f"pics/{i+1}.jpg") for i in range(self.numOfPics)]
+
+        try:
+            picsInDir = len(os.listdir("pics"))
+            numOfRows = aspects[picsInDir][1]
+        except (FileNotFoundError, KeyError) as e:
+            if not self.getPics():
+                return False
+
+        openImgs = [cv2.imread(f"pics/{i+1}.jpg") for i in range(picsInDir)]
         arrays = [cv2.resize(x, (720, 720)) for x in openImgs]
         rows = [np.hstack(x) for x in np.array_split(arrays, numOfRows)]
         self.collage = np.vstack(rows)
-        shutil.rmtree("pics")
         cv2.imwrite("collage.jpg", self.collage)
+        print("\nSuccess: Collage Saved\n")
+        return True
 
-    def showCollage(self):
-        cv2.imshow("InstaGrid", self.collage)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-    def getPics(self):
+    def getPics(self, search, landscape):
+        totals = [8, 18, 32] if landscape else [10, 21]
+        self.prof = instaloader.Profile.from_username(self.L.context, search)
         try:
-            numOfPics = max(x for x in self.totals if x <= self.prof.mediacount)
+            numOfPics = max(x for x in totals if x <= self.prof.mediacount)
         except ValueError:
-            print(f"Error: Minimum {self.minPics} pics for this wallpaper format")
+            print(f"Error: Minimum {min(totals)} pics for this orientation")
             return False
 
+        if path.exists("pics"):
+            shutil.rmtree("pics")
         os.mkdir("pics")
+        print(f"Downloading {numOfPics} pics...")
         for i, post in enumerate(self.prof.get_posts()):
             if i == numOfPics:
                 break
             self.L.download_pic(f"pics/{str(i+1)}", post.url, datetime.now())
 
-        self.numOfPics = numOfPics
+        return True
 
-    def main(self):
-        self.getPics()
-        if self.numOfPics:
+    def run(self, search, landscape=True):
+        if self.getPics(search, landscape):
             self.saveCollage()
 
 
 if __name__ == "__main__":
-    ig = InstaGrid("rhys.zip", "openaidalle")
-    ig.main()
+    ig = InstaGrid("rhys.zip")
+    ig.run("openaidalle")
