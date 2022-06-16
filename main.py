@@ -21,8 +21,8 @@ class InstaGrid:
             picsInDir = len(os.listdir("pics"))
             numOfRows = aspects[picsInDir][1]
         except (FileNotFoundError, KeyError) as e:
-            if not self.getPics():
-                return False
+            print("Error: Run getPics()")
+            return False
 
         openImgs = [cv2.imread(f"pics/{i+1}.jpg") for i in range(picsInDir)]
         arrays = [cv2.resize(x, (720, 720)) for x in openImgs]
@@ -32,7 +32,7 @@ class InstaGrid:
         print("\nSuccess: Collage Saved\n")
         return True
 
-    def getPics(self, search, landscape):
+    def getPics(self, search, landscape=True):
         totals = [8, 18, 32] if landscape else [10, 21]
         self.prof = instaloader.Profile.from_username(self.L.context, search)
         try:
