@@ -64,9 +64,10 @@ class InstaGrid:
 
     def run(self, search, landscape=True):
         if self.getPics(search, landscape):
-            self.saveCollage()
+            return self.saveCollage()
+        return False
 
 
 if __name__ == "__main__":
     ig = InstaGrid("rhys.zip")
-    ig.saveCollage()
+    ig.run("openaidalle")
