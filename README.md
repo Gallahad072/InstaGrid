@@ -1,6 +1,6 @@
 # Instagrid
 
-I wanted something that could make a collage of an instagram account's pictures so I could make a poster of OpenAi's Dalle 2 creations.
+I wanted something that could make a collage of an instagram account's pictures so I could make a poster of [OpenAi's](https://openai.com/dall-e-2/) Dalle 2 [creations](https://www.instagram.com/openaidalle/).
 
 This [program](main.py) will make a landscape or portrait collage intended for phone on computer wallpapers of any Instagram account you have access too.
 
