@@ -25,7 +25,17 @@ class InstaGrid:
             return False
 
         openImgs = [cv2.imread(f"pics/{i+1}.jpg") for i in range(picsInDir)]
-        arrays = [cv2.resize(x, (720, 720)) for x in openImgs]
+
+        arrays = []
+        for x in openImgs:
+            axisLen = min(x.shape[:2])
+            rowStart = x.shape[0] // 2 - axisLen // 2
+            rowEnd = rowStart + axisLen
+            colStart = x.shape[1] // 2 - axisLen // 2
+            colEnd = colStart + axisLen
+            arrays.append(x[rowStart:rowEnd, colStart:colEnd])
+
+        arrays = [cv2.resize(x, (720, 720)) for x in arrays]
         rows = [np.hstack(x) for x in np.array_split(arrays, numOfRows)]
         self.collage = np.vstack(rows)
         cv2.imwrite("collage.jpg", self.collage)
@@ -59,4 +69,4 @@ class InstaGrid:
 
 if __name__ == "__main__":
     ig = InstaGrid("rhys.zip")
-    ig.run("openaidalle")
+    ig.saveCollage()
