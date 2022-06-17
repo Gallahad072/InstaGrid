@@ -8,7 +8,7 @@ import instaloader
 import cv2
 
 
-class InstaGrid:
+class InstaCollage:
     def __init__(self, username) -> None:
         self.L = instaloader.Instaloader()
         self.L.interactive_login(username)
@@ -69,5 +69,5 @@ class InstaGrid:
 
 
 if __name__ == "__main__":
-    ig = InstaGrid("rhys.zip")
+    ig = InstaCollage("rhys.zip")
     ig.run("openaidalle")
