@@ -1,4 +1,4 @@
-# InstaCollage
+# Instagram Collage
 
 I wanted something that could make a collage of an instagram account's pictures so I could make a poster of [OpenAi's](https://openai.com/dall-e-2/) Dalle 2 [creations](https://www.instagram.com/openaidalle/).
 
