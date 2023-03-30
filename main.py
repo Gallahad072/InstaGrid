@@ -1,10 +1,11 @@
-from datetime import datetime
-import numpy as np
 import os
+import sys
 import shutil
+from datetime import datetime
 
 import instaloader
 import cv2
+import numpy as np
 
 ASPECTS = {8: (4, 2), 18: (6, 3), 32: (8, 4), 10: (2, 5), 21: (3, 7)}
 
@@ -60,11 +61,15 @@ class InstaCollage:
         return True
 
     def run(self, search, landscape=True):
+        print(f"Creating Collage of {search}...")
         if self.getPics(search, landscape):
             return self.saveCollage()
         return False
 
 
 if __name__ == "__main__":
-    ig = InstaCollage("rhyswalexander")
-    ig.run("openaidalle")
+    account_name = sys.argv[1] if len(sys.argv) > 1 else input("Enter Your Username: ")
+    search_name = sys.argv[2] if len(sys.argv) > 2 else input("Enter Search Name: ")
+    landscape = True if len(sys.argv) > 3 and sys.argv[3] == "True" else False
+    ig = InstaCollage(account_name)
+    ig.run(search_name, landscape)

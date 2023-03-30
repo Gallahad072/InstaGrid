@@ -8,7 +8,13 @@ This [program](main.py) will make a landscape or portrait collage of any Instagr
 
 ## Instructions
 
-First you must create an 'InstaCollage' object. This object requires the parameter of your Instagram username.
+Run the code in the terminal like this:
+
+`python main.py <username> <search> <landscape>`
+
+`<username>` is the username of the account you want to login with.
+`<search>` is the name of the account you want to make the collage of.
+`<landscape>` is True for landscape and False for portrait, defaults to True.
 
 ## Functions
 
